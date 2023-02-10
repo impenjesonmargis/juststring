@@ -1,0 +1,69 @@
+var shapes = [];
+
+function vmin(viewport_percent) {
+	var canvas_size = windowWidth > windowHeight ? windowHeight : windowWidth;
+	canvas_size -= canvas_size * ((100 - viewport_percent) / 100);
+	return canvas_size;
+}
+
+function setup() {
+	createCanvas(vmin(80), vmin(80));
+	init();
+	noFill();
+	// noLoop();
+}
+
+function init() {
+	var size = 50;
+	while (size <= 150) {
+		shapes.push(buildShape(size));
+		size += 10;
+	}
+}
+
+function buildShape(size) {
+	var shape = [];
+	for (var i = 0; i <= TAU; i+=0.3) {
+		shape.push({x: size * sin(i), y: size * cos(i)});
+	}
+	return shape;
+}
+
+function draw() {
+	background(255);
+	translate(width/2, height/2);
+	
+	for (var i = 0; i < shapes.length; i++) {
+		
+		beginShape();
+		curveVertex(shapes[i][shapes[i].length-1].x, shapes[i][shapes[i].length-1].y);
+		for (var j = 0; j < shapes[i].length; j++) {
+			var range = i*0.1+0.1;
+			var offsetX = map(random([-1,1]), -1, 1, -range, range);
+			var offsetY = map(random([-1,1]), -1, 1, -range, range);
+			shapes[i][j].x += offsetX;
+			shapes[i][j].y += offsetY;
+			
+			curveVertex(shapes[i][j].x, shapes[i][j].y);
+		}
+		curveVertex(shapes[i][0].x, shapes[i][0].y);
+		curveVertex(shapes[i][1].x, shapes[i][1].y);
+		endShape();
+	}
+	
+// 	beginShape();
+// 	curveVertex(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
+// 	for (var i = 0; i < vertices.length; i++) {
+// 		var range = i*0.01+0.1;
+// 		var offsetX = map(random([-1,1]), -1, 1, -range, range);
+// 		var offsetY = map(random([-1,1]), -1, 1, -range, range);
+		
+// 		vertices[i].x += offsetX;
+// 		vertices[i].y += offsetY;
+		
+// 		curveVertex(vertices[i].x, vertices[i].y);
+// 	}
+// 	// curveVertex(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
+// 	curveVertex(vertices[0].x, vertices[0].y);
+// 	endShape(CLOSE);
+}
